@@ -9,11 +9,12 @@
 #include <functional>
 #include <ctime>
 
+#define debug 0
 /*
-1) ²úÉúÑ¡ÊÖ £º ĞÕÃû¡¢µÃ·Ö£»Ñ¡ÊÖ±àºÅ
-2) µÚ1ÂÖ	Ñ¡ÊÖ³éÇ© Ñ¡ÊÖ±ÈÈü ²é¿´±ÈÈü½á¹û
-3) µÚ2ÂÖ	Ñ¡ÊÖ³éÇ© Ñ¡ÊÖ±ÈÈü ²é¿´±ÈÈü½á¹û
-4) µÚ3ÂÖ	Ñ¡ÊÖ³éÇ© Ñ¡ÊÖ±ÈÈü ²é¿´±ÈÈü½á¹û
+1) äº§ç”Ÿé€‰æ‰‹ ï¼š å§“åã€å¾—åˆ†ï¼›é€‰æ‰‹ç¼–å·
+2) ç¬¬1è½®	é€‰æ‰‹æŠ½ç­¾ é€‰æ‰‹æ¯”èµ› æŸ¥çœ‹æ¯”èµ›ç»“æœ
+3) ç¬¬2è½®	é€‰æ‰‹æŠ½ç­¾ é€‰æ‰‹æ¯”èµ› æŸ¥çœ‹æ¯”èµ›ç»“æœ
+4) ç¬¬3è½®	é€‰æ‰‹æŠ½ç­¾ é€‰æ‰‹æ¯”èµ› æŸ¥çœ‹æ¯”èµ›ç»“æœ
 */
 
 using namespace std;
@@ -21,8 +22,8 @@ using namespace std;
 class Speaker
 {
 public:
-	string m_Name; //ĞÕÃû
-	int m_Score[3]; //Ñ¡ÊÖµÃ·Ö
+	string m_Name; //å§“å
+	int m_Score[3]; //é€‰æ‰‹å¾—åˆ†
 };
 
 
@@ -31,7 +32,7 @@ void createSpeaker(vector<int>&v, map<int,Speaker>&m)
 	string nameSeed = "ABCDEFGHIJKLMNOPQRSTUVWX";
 	for (int i = 0; i < 24;i++)
 	{
-		string name = "Ñ¡ÊÖ";
+		string name = "é€‰æ‰‹";
 		name += nameSeed[i];
 		Speaker sp;
 		sp.m_Name = name;
@@ -39,8 +40,8 @@ void createSpeaker(vector<int>&v, map<int,Speaker>&m)
 		{
 			sp.m_Score[j] = 0;
 		}
-		v.push_back(i + 100);//v´æÑ¡ÊÖ±àºÅ  100 ~ 123
-		m.insert(make_pair(i + 100, sp));//m´æ·Å±àºÅ ºÍ¶ÔÓ¦Ñ¡ÊÖ
+		v.push_back(i + 100);//vå­˜é€‰æ‰‹ç¼–å·  100 ~ 123
+		m.insert(make_pair(i + 100, sp));//må­˜æ”¾ç¼–å· å’Œå¯¹åº”é€‰æ‰‹
 	}
 }
 
@@ -50,53 +51,53 @@ void speechDraw(vector<int>&v)
 	random_shuffle(v.begin(), v.end());
 }
 
-// ²ÎÊı1 £º´ú±í ±ÈÈüÂÖÊı          ²ÎÊı2£º±ÈÈüÈËÔ±±àºÅ          ²ÎÊı3 £º ÈËÔ±±àºÅºÍ¾ßÌåÈËÔ±ĞÅÏ¢ ²ÎÊı4    £º½ú¼¶ÈËÔ±±àºÅ
+// å‚æ•°1 ï¼šä»£è¡¨ æ¯”èµ›è½®æ•°          å‚æ•°2ï¼šæ¯”èµ›äººå‘˜ç¼–å·          å‚æ•°3 ï¼š äººå‘˜ç¼–å·å’Œå…·ä½“äººå‘˜ä¿¡æ¯ å‚æ•°4    ï¼šæ™‹çº§äººå‘˜ç¼–å·
 void speechContest(int index, vector<int>&v ,  map<int,Speaker>&m , vector<int>&v2)
 {
-	multimap<int, int, greater<int>> mGroup; //ÁÙÊ±ÈİÆ÷  ´æ·ÅĞ¡×éÈËÔ±ĞÅÏ¢£¬ key´ú±í·ÖÊı¡¢value´ú±í±àºÅ£¬greater´ú±íÅÅĞò¹æÔò
+	multimap<int, int, greater<int>> mGroup; //ä¸´æ—¶å®¹å™¨  å­˜æ”¾å°ç»„äººå‘˜ä¿¡æ¯ï¼Œ keyä»£è¡¨åˆ†æ•°ã€valueä»£è¡¨ç¼–å·ï¼Œgreaterä»£è¡¨æ’åºè§„åˆ™
 	int num = 0;
 	for (vector<int>::iterator it = v.begin(); it != v.end();it++)
 	{
 		num++;
-		deque<int>d;//dequeÈİÆ÷ ´æ·ÅÆÀÎ¯´ò·Ö
+		deque<int>d;//dequeå®¹å™¨ å­˜æ”¾è¯„å§”æ‰“åˆ†
 		for (int i = 0; i < 10;i++)
 		{
 			int score = rand() % 41 + 60; //60 ~ 100
 			d.push_back(score);
 		}
 
-		//ÅÅĞò
+		//æ’åº
 		sort(d.begin(), d.end());
-		//È¥³ı×î¸ß·ÖºÍ×îµÍ·Ö
+		//å»é™¤æœ€é«˜åˆ†å’Œæœ€ä½åˆ†
 		d.pop_back();
 		d.pop_front();
 
-		//¼ÆËã×Ü·Ö
+		//è®¡ç®—æ€»åˆ†
 		int sum = accumulate(d.begin(), d.end(), 0);
 
-		//¼ÆËãÆ½¾ù·Ö
+		//è®¡ç®—å¹³å‡åˆ†
 		int avg = sum / d.size();
 
-		//½«Æ½¾ù·Ö Í¬²½µ½ ÈËÉíÉÏ
+		//å°†å¹³å‡åˆ† åŒæ­¥åˆ° äººèº«ä¸Š
 		m[*it].m_Score[index - 1] = avg;
 
-		//½«ĞÅÏ¢ ´æ·Åµ½ÁÙÊ±ÈİÆ÷ÖĞ
+		//å°†ä¿¡æ¯ å­˜æ”¾åˆ°ä¸´æ—¶å®¹å™¨ä¸­
 		mGroup.insert(make_pair(avg, *it));
 
-		//Ã¿6¸öÑ¡ÊÖ  È¡³öÇ°ÈıÃû ½ú¼¶
+		//æ¯6ä¸ªé€‰æ‰‹  å–å‡ºå‰ä¸‰å æ™‹çº§
 		if (num%6 == 0)
 		{
-			/*cout << "Ğ¡×é±ÈÈü³É¼¨ÈçÏÂ£º" << endl;
+			/*cout << "å°ç»„æ¯”èµ›æˆç»©å¦‚ä¸‹ï¼š" << endl;
 			for (multimap<int, int, greater<int>>::iterator mit = mGroup.begin(); mit != mGroup.end(); mit++)
 			{
-				cout << "±àºÅ£º " << mit->second << " ĞÕÃû£º " << m[mit->second].m_Name << " µÃ·Ö£º " << m[mit->second].m_Score[index - 1] << endl;
+				cout << "ç¼–å·ï¼š " << mit->second << " å§“åï¼š " << m[mit->second].m_Name << " å¾—åˆ†ï¼š " << m[mit->second].m_Score[index - 1] << endl;
 			}*/
 
-			//È¡Ç°ÈıÃû½ú¼¶
+			//å–å‰ä¸‰åæ™‹çº§
 			int count = 0;
 			for (multimap<int, int, greater<int>>::iterator mit = mGroup.begin(); mit != mGroup.end(), count < 3; mit++, count++)
 			{
-				//½«Ç°ÈıÃû  ´æ·Åµ½ v2ÈİÆ÷ÖĞ
+				//å°†å‰ä¸‰å  å­˜æ”¾åˆ° v2å®¹å™¨ä¸­
 				v2.push_back((*mit).second);
 			}
 			mGroup.clear();
@@ -107,15 +108,15 @@ void speechContest(int index, vector<int>&v ,  map<int,Speaker>&m , vector<int>&
 
 void showScore(int index, vector<int>&v, map<int, Speaker>&m)
 {
-	cout << "µÚ" << index << "ÂÖ±ÈÈü³É¼¨ÈçÏÂ£º " << endl;
+	cout << "ç¬¬" << index << "è½®æ¯”èµ›æˆç»©å¦‚ä¸‹ï¼š " << endl;
 
 	for (map<int, Speaker>::iterator it = m.begin(); it != m.end();it++)
 	{
-		cout << "Ñ¡ÊÖ±àºÅ£º " << it->first << " ĞÕÃû£º " << it->second.m_Name << " µÃ·Ö£º " << it->second.m_Score[index - 1] << endl;
+		cout << "é€‰æ‰‹ç¼–å·ï¼š " << it->first << " å§“åï¼š " << it->second.m_Name << " å¾—åˆ†ï¼š " << it->second.m_Score[index - 1] << endl;
 	}
 
-	//½ú¼¶ÈËÔ±±àºÅ
-	cout << "½ú¼¶ÈËÔ±±àºÅÈçÏÂ£º " << endl;
+	//æ™‹çº§äººå‘˜ç¼–å·
+	cout << "æ™‹çº§äººå‘˜ç¼–å·å¦‚ä¸‹ï¼š " << endl;
 	for (vector<int>::iterator it = v.begin(); it != v.end();it++)
 	{
 		cout << *it << endl;
@@ -125,45 +126,44 @@ void showScore(int index, vector<int>&v, map<int, Speaker>&m)
 
 int main(){
 
-	//Ëæ»úÖÖ×Ó
+	//éšæœºç§å­
 	srand((unsigned int)time(NULL));
 
-	vector<int>v; //´æ·ÅÑ¡ÊÖ±àºÅÈİÆ÷
-	map<int, Speaker> m; //´æ·ÅÑ¡ÊÖÒÔ¼°Ñ¡ÊÖ¶ÔÓ¦µÄ±àºÅ
+	vector<int>v; //å­˜æ”¾é€‰æ‰‹ç¼–å·å®¹å™¨
+	map<int, Speaker> m; //å­˜æ”¾é€‰æ‰‹ä»¥åŠé€‰æ‰‹å¯¹åº”çš„ç¼–å·
 
-	//1¡¢´´½¨Ñ¡ÊÖ
+	//1ã€åˆ›å»ºé€‰æ‰‹
 	createSpeaker(v,m);
 
-	//2¡¢³éÇ©
+	//2ã€æŠ½ç­¾
 	speechDraw(v);
 
-	//3¡¢Ñ¡ÊÖ±ÈÈü
-	vector<int>v2; //µÚÒ»ÂÖ½ú¼¶ÈËÔ±±àºÅµÄÈİÆ÷
+	//3ã€é€‰æ‰‹æ¯”èµ›
+	vector<int>v2; //ç¬¬ä¸€è½®æ™‹çº§äººå‘˜ç¼–å·çš„å®¹å™¨
 	speechContest(1, v, m, v2);
 
-	//4¡¢ÏÔÊ¾µÃ·Ö
+	//4ã€æ˜¾ç¤ºå¾—åˆ†
 	showScore(1,v2 , m);
 
 
-	// µÚ¶şÂÖ±ÈÈü
+	// ç¬¬äºŒè½®æ¯”èµ›
 	speechDraw(v2);
-	vector<int>v3; //µÚ¶şÂÖ½ú¼¶ÈËÔ±±àºÅµÄÈİÆ÷
+	vector<int>v3; //ç¬¬äºŒè½®æ™‹çº§äººå‘˜ç¼–å·çš„å®¹å™¨
 	speechContest(2, v2, m, v3);
 	showScore(2, v3, m);
 
 
-	//µÚÈıÂÖ±ÈÈü
+	//ç¬¬ä¸‰è½®æ¯”èµ›
 	speechDraw(v3);
-	vector<int>v4; //µÚ¶şÂÖ½ú¼¶ÈËÔ±±àºÅµÄÈİÆ÷
+	vector<int>v4; //ç¬¬äºŒè½®æ™‹çº§äººå‘˜ç¼–å·çš„å®¹å™¨
 	speechContest(3, v3, m, v4);
 	showScore(3, v4, m);
 
 
-
-	//²âÊÔ 
-	//for (map<int, Speaker>::iterator it = m.begin(); it != m.end();it++)
-	//{
-	//	cout << "Ñ¡ÊÖ±àºÅ£º " << it->first << " ĞÕÃû£º" << it->second.m_Name << " µÃ·Ö£º" << it->second.m_Score[0] << endl;
-	//}
-
+#if debug 
+	for (map<int, Speaker>::iterator it = m.begin(); it != m.end();it++)
+	
+		cout << "é€‰æ‰‹ç¼–å·ï¼š " << it->first << " å§“åï¼š" << it->second.m_Name << " å¾—åˆ†ï¼š" << it->second.m_Score[0] << endl;
+	}
+#endif
 }
