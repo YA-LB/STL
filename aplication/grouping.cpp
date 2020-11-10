@@ -1,11 +1,10 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include <vector>
 #include <string>
 #include <map>
-#include <ctime>//Ê±¼ä
+#include <ctime>//æ—¶é—´
 
-//Ô±¹¤·Ö×é
+//å‘˜å·¥åˆ†ç»„
 using namespace std;
 enum
 {
@@ -15,8 +14,8 @@ enum
 class Worker
 {
 public:
-	string m_Name;//ĞÕÃû
-	int m_Money; //¹¤×Ê
+	string m_Name;//å§“å
+	int m_Money; //å·¥èµ„
 };
 
 void createWorker(vector<Worker>&v)
@@ -25,7 +24,7 @@ void createWorker(vector<Worker>&v)
 	for (int i = 0; i < 5;i++)
 	{
 		Worker worker;
-		worker.m_Name = "Ô±¹¤";
+		worker.m_Name = "å‘˜å·¥";
 		worker.m_Name += nameSeed[i];
 		worker.m_Money = rand() % 10000 + 10000; // 10000 ~ 19999
 		v.push_back(worker);
@@ -37,10 +36,10 @@ void setGroup(vector<Worker>&v, multimap<int, Worker>&m)
 {
 	for (vector<Worker>::iterator it = v.begin(); it != v.end();it++)
 	{
-		//Ëæ»ú²úÉú²¿ÃÅ±àºÅ  0 1 2 
+		//éšæœºäº§ç”Ÿéƒ¨é—¨ç¼–å·  0 1 2 
 		int id = rand() % 3;
 
-		//½«Ô±¹¤²åÈëµ½·Ö×éµÄÈİÆ÷ÖĞ
+		//å°†å‘˜å·¥æ’å…¥åˆ°åˆ†ç»„çš„å®¹å™¨ä¸­
 		m.insert(make_pair(id, *it));
 	}
 
@@ -49,52 +48,49 @@ void setGroup(vector<Worker>&v, multimap<int, Worker>&m)
 void showWorker(multimap<int,Worker>&m)
 {
 	// 0 A   0  B   1  C   2  D  2 E
-	cout << "²ÆÎñ²¿ÃÅÈËÔ±ÈçÏÂ£º " << endl;
+	cout << "è´¢åŠ¡éƒ¨é—¨äººå‘˜å¦‚ä¸‹ï¼š " << endl;
 	multimap<int,Worker>::iterator pos = m.find(CAIWU);
 	int count = m.count(CAIWU);
 	int index = 0;
 
 	for (; pos != m.end(), index < count; pos++, index++)
 	{
-		cout << "ĞÕÃû£º " << pos->second.m_Name << " ¹¤×Ê£º " << pos->second.m_Money << endl;
+		cout << "å§“åï¼š " << pos->second.m_Name << " å·¥èµ„ï¼š " << pos->second.m_Money << endl;
 	}
 
-	cout << "ÈËÁ¦×ÊÔ´²¿ÃÅÈËÔ±ÈçÏÂ£º " << endl;
+	cout << "äººåŠ›èµ„æºéƒ¨é—¨äººå‘˜å¦‚ä¸‹ï¼š " << endl;
 	pos = m.find(RENLI);
 	count = m.count(RENLI);
 	index = 0;
 
 	for (; pos != m.end(), index < count; pos++, index++)
 	{
-		cout << "ĞÕÃû£º " << pos->second.m_Name << " ¹¤×Ê£º " << pos->second.m_Money << endl;
+		cout << "å§“åï¼š " << pos->second.m_Name << " å·¥èµ„ï¼š " << pos->second.m_Money << endl;
 	}
 
 
 
-	cout << "ÃÀÊõ²¿ÃÅÈËÔ±ÈçÏÂ£º " << endl;
+	cout << "ç¾æœ¯éƒ¨é—¨äººå‘˜å¦‚ä¸‹ï¼š " << endl;
 	pos = m.find(MEISHU);
 	count = m.count(MEISHU);
 	index = 0;
 
 	for (; pos != m.end(), index < count; pos++, index++)
 	{
-		cout << "ĞÕÃû£º " << pos->second.m_Name << " ¹¤×Ê£º " << pos->second.m_Money << endl;
+		cout << "å§“åï¼š " << pos->second.m_Name << " å·¥èµ„ï¼š " << pos->second.m_Money << endl;
 	}
 
 }
 
 int main(){
-
-	//Ëæ»úÊıÖÖ×Ó
+	//éšæœºæ•°ç§å­
 	srand((unsigned int)time(NULL));
-	vector<Worker>v; //´æ·ÅÔ±¹¤µÄÈİÆ÷
-	//Ô±¹¤µÄ´´½¨
+	vector<Worker>v; //å­˜æ”¾å‘˜å·¥çš„å®¹å™¨
+	//å‘˜å·¥çš„åˆ›å»º
 	createWorker(v);
-	//Ô±¹¤·Ö×é
+	//å‘˜å·¥åˆ†ç»„
 	multimap<int, Worker>m;
 	setGroup(v,m);
-	//·Ö²¿ÃÅÏÔÊ¾Ô±¹¤
+	//åˆ†éƒ¨é—¨æ˜¾ç¤ºå‘˜å·¥
 	showWorker(m);
-
-
 }
